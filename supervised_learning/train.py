@@ -27,66 +27,6 @@ device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 if torch.cuda.is_available():
     torch.set_default_tensor_type(torch.cuda.FloatTensor)
 
-# def exp_2(): #wich weight are favorised and choose the best weight for 100 experience, can we predict if there will be a winning ticket or which pruning will be the best just seeing the initializationm, try normal init on bias, look how xavier works, being stuck in local minima, create ai model to predict if init good and what pruning should we do, and if we can do it now
-#     train_loader = DataLoader(
-#         datasets.MNIST('../data', train=True, download=True,
-#                        transform=transforms.Compose([
-#                            transforms.ToTensor(),
-#                            transforms.Normalize((0.1307,), (0.3081,))
-#                        ])),
-#         batch_size=opt.batch_size, shuffle=True)
-#
-#     test_loader = DataLoader(
-#         datasets.MNIST('../data', train=False, transform=transforms.Compose([
-#             transforms.ToTensor(),
-#             transforms.Normalize((0.1307,), (0.3081,))
-#         ])),
-#         batch_size=opt.batch_size, shuffle=True)
-#
-#     model = Lenet(28 * 28, opt.h1_dim, opt.h2_dim).to(device)
-#
-#
-#     optimizer = torch.optim.Adam([w for name, w in model.named_parameters() if not 'mask' in name], lr=opt.lr)
-#
-#     all_acc = []
-#
-#     acc_0 = []
-#
-#     iteration = 0
-#     for epoch in range(1, opt.epochs + 1):
-#         print(epoch)
-#         model.train()
-#         for batch_idx, (data, target) in enumerate(train_loader):
-#             iteration += 1
-#             data, target = data.to(device), target.to(device)
-#             optimizer.zero_grad()
-#             output = model(data)
-#             loss = F.nll_loss(output, target)
-#             loss.backward()
-#             optimizer.step()
-#             if iteration % opt.record_every == 0:
-#
-#                 model.eval()
-#                 test_loss = 0
-#                 correct = 0
-#                 with torch.no_grad():
-#                     for data, target in test_loader:
-#                         data, target = data.to(device), target.to(device)
-#                         output = model(data)
-#                         # test_loss += F.nll_loss(output, target, reduction='sum').item()  # sum up batch loss
-#                         pred = output.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
-#                         correct += pred.eq(target.view_as(pred)).sum().item()
-#
-#                 # test_loss /= len(test_loader.dataset)
-#
-#                 acc_0.append(correct / len(test_loader.dataset))
-#
-#     all_acc.append(acc_0)
-#
-#
-# def exp3(): #change the dataset take half of mnist reinitialize train on the other half, i like projects that mix theory amnd practice, i lik eto think of the mathemtical foundation amd the computational challenges so finding a theory to dl is perfect,
-#     pass
-
 def main():
 
     sum_mw1_after_pruning = []
@@ -365,11 +305,67 @@ def main():
         plt.close()
 
 
-
-
-
-
 main()
 
+
+# def exp_2(): #wich weight are favorised and choose the best weight for 100 experience, can we predict if there will be a winning ticket or which pruning will be the best just seeing the initializationm, try normal init on bias, look how xavier works, being stuck in local minima, create ai model to predict if init good and what pruning should we do, and if we can do it now
+#     train_loader = DataLoader(
+#         datasets.MNIST('../data', train=True, download=True,
+#                        transform=transforms.Compose([
+#                            transforms.ToTensor(),
+#                            transforms.Normalize((0.1307,), (0.3081,))
+#                        ])),
+#         batch_size=opt.batch_size, shuffle=True)
+#
+#     test_loader = DataLoader(
+#         datasets.MNIST('../data', train=False, transform=transforms.Compose([
+#             transforms.ToTensor(),
+#             transforms.Normalize((0.1307,), (0.3081,))
+#         ])),
+#         batch_size=opt.batch_size, shuffle=True)
+#
+#     model = Lenet(28 * 28, opt.h1_dim, opt.h2_dim).to(device)
+#
+#
+#     optimizer = torch.optim.Adam([w for name, w in model.named_parameters() if not 'mask' in name], lr=opt.lr)
+#
+#     all_acc = []
+#
+#     acc_0 = []
+#
+#     iteration = 0
+#     for epoch in range(1, opt.epochs + 1):
+#         print(epoch)
+#         model.train()
+#         for batch_idx, (data, target) in enumerate(train_loader):
+#             iteration += 1
+#             data, target = data.to(device), target.to(device)
+#             optimizer.zero_grad()
+#             output = model(data)
+#             loss = F.nll_loss(output, target)
+#             loss.backward()
+#             optimizer.step()
+#             if iteration % opt.record_every == 0:
+#
+#                 model.eval()
+#                 test_loss = 0
+#                 correct = 0
+#                 with torch.no_grad():
+#                     for data, target in test_loader:
+#                         data, target = data.to(device), target.to(device)
+#                         output = model(data)
+#                         # test_loss += F.nll_loss(output, target, reduction='sum').item()  # sum up batch loss
+#                         pred = output.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
+#                         correct += pred.eq(target.view_as(pred)).sum().item()
+#
+#                 # test_loss /= len(test_loader.dataset)
+#
+#                 acc_0.append(correct / len(test_loader.dataset))
+#
+#     all_acc.append(acc_0)
+#
+#
+# def exp3(): #change the dataset take half of mnist reinitialize train on the other half,
+#     pass
 
 

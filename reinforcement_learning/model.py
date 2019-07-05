@@ -1,3 +1,10 @@
+###
+'''
+June 2019
+Code by: Arnaud Fickinger
+'''
+###
+
 import torch
 import torch.nn as nn
 import numpy as np

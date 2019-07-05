@@ -1,3 +1,10 @@
+###
+'''
+June 2019
+Code by: Arnaud Fickinger
+'''
+###
+
 import gym
 import math
 import random
