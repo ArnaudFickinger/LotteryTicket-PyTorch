@@ -97,17 +97,17 @@ class Lenet(nn.Module):
         self.fc3.bias.data = self.fc3_b_trained
 
     def prune(self, rate, rate_output):
-        fc1_w_treshold = np.percentile(self.fc1.weight.detach().cpu().numpy(), rate)
-        fc2_w_treshold = np.percentile(self.fc2.weight.detach().cpu().numpy(), rate)
-        fc3_w_treshold = np.percentile(self.fc3.weight.detach().cpu().numpy(), rate_output)
+        fc1_w_treshold = np.percentile(torch.abs(self.fc1.weight).detach().cpu().numpy(), rate)
+        fc2_w_treshold = np.percentile(torch.abs(self.fc2.weight).detach().cpu().numpy(), rate)
+        fc3_w_treshold = np.percentile(torch.abs(self.fc3.weight).detach().cpu().numpy(), rate_output)
 
         self.mask1.weight.data = torch.mul(torch.gt(torch.abs(self.fc1.weight), fc1_w_treshold).float(), self.mask1.weight)
         self.mask2.weight.data = torch.mul(torch.gt(torch.abs(self.fc2.weight), fc2_w_treshold).float(), self.mask2.weight)
         self.mask3.weight.data = torch.mul(torch.gt(torch.abs(self.fc3.weight), fc3_w_treshold).float(), self.mask3.weight)
 
-        fc1_b_treshold = np.percentile(self.fc1.bias.detach().cpu().numpy(), rate)
-        fc2_b_treshold = np.percentile(self.fc2.bias.detach().cpu().numpy(), rate)
-        fc3_b_treshold = np.percentile(self.fc3.bias.detach().cpu().numpy(), rate_output)
+        fc1_b_treshold = np.percentile(torch.abs(self.fc1.bias).detach().cpu().numpy(), rate)
+        fc2_b_treshold = np.percentile(torch.abs(self.fc2.bias).detach().cpu().numpy(), rate)
+        fc3_b_treshold = np.percentile(torch.abs(self.fc3.bias).detach().cpu().numpy(), rate_output)
 
         self.mask1.bias.data = torch.mul(torch.gt(torch.abs(self.fc1.bias), fc1_b_treshold).float(), self.mask1.bias)
         self.mask2.bias.data = torch.mul(torch.gt(torch.abs(self.fc2.bias), fc2_b_treshold).float(), self.mask2.bias)
