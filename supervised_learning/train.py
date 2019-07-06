@@ -63,6 +63,8 @@ def main():
 
     for test in range(10):
 
+        print("test {}".format(test))
+
         model = Lenet(28*28, opt.h1_dim, opt.h2_dim).to(device)
 
         optimizer = torch.optim.Adam([w for name, w in model.named_parameters() if not 'mask' in name], lr=opt.lr)
@@ -107,36 +109,39 @@ def main():
         print("smart")
 
         for rate in pruning:
+
+            print("rate: {}".format(rate))
+
             tmpr_acc = []
             output_rate = int(rate/2)
 
             optimizer = torch.optim.Adam([w for name, w in model.named_parameters() if not 'mask' in name], lr=opt.lr) #try with that
-            print("..........")
-
-            print(model.mask1.weight.data.sum().item())
+            # print("..........")
+            #
+            # print(model.mask1.weight.data.sum().item())
 
             model.load_trained_weight()
-            print(model.mask1.weight.data.sum().item())
+            # print(model.mask1.weight.data.sum().item())
             model.reset_mask()
-            print(model.mask1.weight.data.sum().item())
+            # print(model.mask1.weight.data.sum().item())
             model.prune(rate, output_rate)
-            print(model.mask1.weight.data.sum().item())
+            # print(model.mask1.weight.data.sum().item())
             model.reinitializ()
-            print(model.mask1.weight.data.sum().item())
+            # print(model.mask1.weight.data.sum().item())
 
 
 
-            print(rate)
+            # print(rate)
+            #
+            # print(model.mask1.weight.data.sum().item())
+            #
+            # print(model.mask1.weight.data.shape)
+            #
+            # print(model.mask1.weight.data)
+            #
+            # print("..........")
 
-            print(model.mask1.weight.data.sum().item())
-
-            print(model.mask1.weight.data.shape)
-
-            print(model.mask1.weight.data)
-
-            print("..........")
-
-
+            first = True
 
             for epoch in range(1, opt.epochs + 1):
                 # print(epoch)
@@ -145,7 +150,8 @@ def main():
                     iteration += 1
                     data, target = data.to(device), target.to(device)
                     optimizer.zero_grad()
-                    output = model(data)
+                    output = model(data, verbal = first)
+                    first = False
                     loss = F.nll_loss(output, target)
                     loss.backward()
                     optimizer.step()
@@ -190,6 +196,10 @@ def main():
         print("rand")
 
         for rate in pruning:
+
+            print("rate: {}".format(rate))
+
+
             tmpr_acc = []
             output_rate = int(rate / 2)
 
@@ -200,30 +210,32 @@ def main():
             model.prune(rate, output_rate)
             model.random_reinit()
 
-            print("..........")
+            # print("..........")
+            #
+            # print(rate)
+            #
+            # print(model.mask1.weight.data.sum().item())
+            #
+            # print(model.mask1.weight.data.shape)
+            #
+            # print(model.mask1.weight.data)
+            #
+            # print("..........")
 
-            print(rate)
-
-            print(model.mask1.weight.data.sum().item())
-
-            print(model.mask1.weight.data.shape)
-
-            print(model.mask1.weight.data)
-
-            print("..........")
-
+            first = True
 
 
 
 
             for epoch in range(1, opt.epochs + 1):
-                print(epoch)
+                # print(epoch)
                 model.train()
                 for batch_idx, (data, target) in enumerate(train_loader):
                     iteration += 1
                     data, target = data.to(device), target.to(device)
                     optimizer.zero_grad()
-                    output = model(data)
+                    output = model(data, verbal = first)
+                    first = False
                     loss = F.nll_loss(output, target)
                     loss.backward()
                     optimizer.step()

@@ -29,6 +29,8 @@ import torchvision.transforms as T
 from utils import *
 from model import *
 
+import cv2 as cv
+
 from options import Options
 opt = Options().parse()
 
@@ -48,7 +50,6 @@ else:
 loss_plt = []
 reward_100 = []
 
-
 def main():
     overall_acc_0_init = []
     overall_acc_4_init = []
@@ -67,6 +68,8 @@ def main():
 
     for test in range(10):
 
+        print("test {}".format(test))
+
         policy_net = FCNet(space_dim, 300, 100, action_dim)
         target_net = FCNet(space_dim, 300, 100, action_dim)
 
@@ -82,7 +85,7 @@ def main():
 
         all_mean_100_rewards = []
         for episode in range(opt.episodes):
-            print(episode)
+            # print(episode)
             R = 0
             s = env.reset()
             step = 0
@@ -90,10 +93,11 @@ def main():
                 step += 1
                 a = Solver.act(s)
                 s_next, r, done, _ = env.step(a)
+                env.render()
                 R += r
                 Solver.remember(s, a, r, s_next, done)
                 if done:
-                    print(R)
+                    # print(R)
                     rewards.append(R)
                     if (len(rewards) > 100):
                         mean_100_rewards_0.append(np.mean(rewards[-100:]))
@@ -107,7 +111,11 @@ def main():
 
         policy_net.save_trained_weight()
 
+        print("smart")
+
         for rate in pruning:
+
+            print("rate: {}".format(rate))
             tmpr_mean_100_reward = []
             output_rate = int(rate/2)
 
@@ -125,7 +133,7 @@ def main():
             rewards = []
 
             for episode in range(opt.episodes):
-                print(episode)
+                # print(episode)
                 R = 0
                 s = env.reset()
                 step = 0
@@ -136,7 +144,7 @@ def main():
                     R += r
                     Solver.remember(s, a, r, s_next, done)
                     if done:
-                        print(R)
+                        # print(R)
                         rewards.append(R)
                         if (len(rewards) > 100):
                             tmpr_mean_100_reward.append(np.mean(rewards[-100:]))
@@ -165,7 +173,11 @@ def main():
         all_mean_100_rewards = []
         all_mean_100_rewards.append(mean_100_rewards_0)
 
+        print("rand")
+
         for rate in pruning:
+
+            print("rate: {}".format(rate))
             tmpr_mean_100_reward = []
             output_rate = int(rate / 2)
 
@@ -185,7 +197,7 @@ def main():
             rewards = []
 
             for episode in range(opt.episodes):
-                print(episode)
+                # print(episode)
                 R = 0
                 s = env.reset()
                 step = 0
@@ -196,7 +208,7 @@ def main():
                     R += r
                     Solver.remember(s, a, r, s_next, done)
                     if done:
-                        print(R)
+                        # print(R)
                         rewards.append(R)
                         if (len(rewards) > 100):
                             tmpr_mean_100_reward.append(np.mean(rewards[-100:]))
